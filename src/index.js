@@ -1,13 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import ReactDOM from "react-dom";
 import { Container, Draggable } from "react-smooth-dnd";
+import { useLocation, BrowserRouter as Router } from "react-router-dom";
 import {arrayMoveImmutable} from "array-move";
 import List from "@material-ui/core/List";
 import Paper from "@material-ui/core/Paper";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
- 
+import Button from "@material-ui/core/Button";
+
+
+function useQuery() {
+  const { search } = useLocation();
+  return useMemo(()=> new URLSearchParams(search), [search]);
+}
+
+
 const SortableList = () => {
+  let query = useQuery();
+
   // 初期データ。state で並び順も含めて管理。
   // 適当なタイミングでこの state をどうこうすることによって並び順の情報を任意に扱えます
   const [items, setItems] = useState([
@@ -35,6 +46,7 @@ const SortableList = () => {
  
   // @see https://github.com/kutlugsahin/react-smooth-dnd
   return (
+    <div>
     <div style={{ display: "flex", gap: "10px" }}>
       <Paper style={{ width: "50%", padding: "0 10px" }}>
         <h4>ドラッグ&ドロップで並び順操作</h4>
@@ -50,18 +62,20 @@ const SortableList = () => {
           </Container>
         </List>
       </Paper>
-      <Paper style={{ width: "50%", padding: "0 10px" }}>
-        <h4>並び順データ</h4>
-        <pre>
-          {JSON.stringify(
+    </div>
+      <form action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSegJchoGRpYPoMhOpc7WzOg1mLi_aq_KyGQMpo1u857ZTIwog/formResponse">
+        <input name="entry.189157650" type="hidden" value={query.get('id')} required="required"></input>
+        <textarea style={{display:'none'}} name="entry.398476216" required="required" value={
+          JSON.stringify(
             Array.from(items).sort((a, b) => a.id - b.id),
             null,
             2
-          )}
-        </pre>
-      </Paper>
+          )
+        }></textarea>
+        <Button type="submit" name="button" variant="contained">Submit</Button>
+      </form>
     </div>
   );
 };
  
-ReactDOM.render(<SortableList />, document.getElementById("root"));
+ReactDOM.render(<Router><SortableList /></Router>, document.getElementById("root"));
