@@ -11,11 +11,13 @@
     "react-scripts": "5.0.0",
     "web-vitals": "^2.1.4"
   },
+  "homepage" : "http://sexytant.github.io/matching",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "yarn build && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
