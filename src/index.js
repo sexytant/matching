@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { Container, Draggable } from "react-smooth-dnd";
-import arrayMoveImmutable from "array-move";
+import {arrayMoveImmutable} from "array-move";
 import List from "@material-ui/core/List";
 import Paper from "@material-ui/core/Paper";
 import ListItem from "@material-ui/core/ListItem";
