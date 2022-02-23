@@ -8,7 +8,7 @@ import Paper from "@material-ui/core/Paper";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
-
+import senior_students from "./senior_students.json"
 
 function useQuery() {
   const { search } = useLocation();
@@ -18,17 +18,7 @@ function useQuery() {
 
 const SortableList = () => {
   let query = useQuery();
-
-  // 初期データ。state で並び順も含めて管理。
-  // 適当なタイミングでこの state をどうこうすることによって並び順の情報を任意に扱えます
-  const [items, setItems] = useState([
-    { id: "1", text: "小清水", order: 0 },
-    { id: "2", text: "植田", order: 1 },
-    { id: "3", text: "中村一貴", order: 2 },
-    { id: "4", text: "櫻木", order: 3 },
-    { id: "5", text: "田中", order: 4 }
-  ]);
- 
+  const [items,setItems] = useState(senior_students);
   // Drag And Drop の Drop 時イベント
   // react-smooth-dnd の onDrop で発火
   // このイベントで渡される引数によって元々どのインデックスの要素が消えて、どのインデックスに差し込まれたのかわかります
