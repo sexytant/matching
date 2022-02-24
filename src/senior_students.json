@@ -1,27 +1,32 @@
 [
     {
       "id": "1",
-      "text": "小清水",
+      "text": "A",
+      "mail": "AAA@st.kyoto-u.ac.jp",
       "order": 0
     },
     {
       "id": "2",
-      "text": "植田",
+      "text": "B",
+      "mail": "BBB@st.kyoto-u.ac.jp",
       "order": 1
     },
     {
       "id": "3",
-      "text": "中村一貴",
+      "text": "C",
+      "mail": "CCC@st.kyoto-u.ac.jp",
       "order": 2
     },
     {
       "id": "4",
-      "text": "櫻木",
+      "text": "D",
+      "mail": "DDD@st.kyoto-u.ac.jp",
       "order": 3
     },
     {
       "id": "5",
-      "text": "田中",
+      "text": "E",
+      "mail": "EEE@st.kyoto-u.ac.jp",
       "order": 4
     }
 ]
