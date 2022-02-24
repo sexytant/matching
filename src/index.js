@@ -39,7 +39,15 @@ const SortableList = () => {
     <div>
     <div style={{ display: "flex", gap: "10px" }}>
       <Paper style={{ width: "50%", padding: "0 10px" }}>
+        <h1>下級生向けページ</h1>
+        <p>あなたの名前とメールアドレスを選択</p>
+        <select>
+          <option>aaa@st.kyoto-u.ac.jp</option>
+          <option>bbb@st.kyoto-u.ac.jp</option>
+          <option>ccc@st.kyoto-u.ac.jp</option>
+        </select>
         <h4>ドラッグ&ドロップで並び順操作</h4>
+
         <List>
           <Container onDrop={onDrop}>
             {items.map(({ id, text }) => (
