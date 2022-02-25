@@ -3,14 +3,7 @@ import ReactDOM from "react-dom";
 import { Container, Draggable } from "react-smooth-dnd";
 import { useLocation, BrowserRouter as Router } from "react-router-dom";
 import {arrayMoveImmutable} from "array-move";
-import List from "@material-ui/core/List";
-import Paper from "@material-ui/core/Paper";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Button from "@material-ui/core/Button";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import {Box, List, Paper, Select, ListItemButton, ListItemText, MenuItem, Button, Radio,RadioGroup, FormControlLabel, InputLabel, FormControl} from "@mui/material";
 import senior_students from "./senior_students.json";
 import junior_students from "./junior_students.json";
 
@@ -46,15 +39,15 @@ const SortableList = ({data}) => {
   return (
     <div>
     <div style={{ display: "flex", gap: "10px" }}>
-      <Paper style={{ width: "50%", padding: "0 10px" }}>
+      <Paper style={{ padding: "0 10px" }}>
         <h4>ドラッグ&ドロップで並び順操作</h4>
         <List>
           <Container onDrop={onDrop}>
             {items.map(({ id, text }) => (
               <Draggable key={id}>
-                <ListItem style={{ border: "solid 1px", background: "white" }}>
+                <ListItemButton style={{ border: "solid 1px" }} >
                   <ListItemText primary={text} />
-                </ListItem>
+                </ListItemButton>
               </Draggable>
             ))}
           </Container>
@@ -74,18 +67,25 @@ const SortableList = ({data}) => {
 };
 
 const VotingPage = ({ group }) => {
+  const [selectUserMail, setSelectUserMail] = useState("");
+
   const userList = (group === "senior") ? senior_students : junior_students;
   const candidateList = (group === "junior") ? senior_students : junior_students;
 
   return (
     <form action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSegJchoGRpYPoMhOpc7WzOg1mLi_aq_KyGQMpo1u857ZTIwog/formResponse">
-      <select>
-        {
-          userList.map(  user => <option>{user.mail}</option>)
-        }
-      </select>
-      <SortableList data={candidateList} />
-      <Button type="submit" name="button" variant="contained">Submit</Button>
+      <Box sx={{ maxWidth: 320 }}>
+        <FormControl fullWidth>
+          <InputLabel>E-mail</InputLabel>
+          <Select label={"E-mail"} value={selectUserMail} onChange={(e)=>{ setSelectUserMail(e.target.value) } } >
+            {
+              userList.map( user => <MenuItem value={user.mail} >{user.mail}</MenuItem>)
+            }
+          </Select>
+          <SortableList data={candidateList} />
+          <Button type="submit" name="button" variant="contained">Submit</Button>
+        </FormControl>
+      </Box>
     </form>
   )
 }
