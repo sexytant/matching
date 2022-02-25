@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Container, Draggable } from "react-smooth-dnd";
 import { useLocation, BrowserRouter as Router } from "react-router-dom";
@@ -8,7 +8,11 @@ import Paper from "@material-ui/core/Paper";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
-import senior_students from "./senior_students.json"
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import senior_students from "./senior_students.json";
+import junior_students from "./junior_students.json";
 
 function useQuery() {
   const { search } = useLocation();
@@ -16,9 +20,9 @@ function useQuery() {
 }
 
 
-const SortableList = () => {
+const SortableList = ({data}) => {
   let query = useQuery();
-  const [items,setItems] = useState(senior_students);
+  const [items,setItems] = useState(data);
   // Drag And Drop の Drop 時イベント
   // react-smooth-dnd の onDrop で発火
   // このイベントで渡される引数によって元々どのインデックスの要素が消えて、どのインデックスに差し込まれたのかわかります
@@ -33,21 +37,17 @@ const SortableList = () => {
       });
     setItems(updater);
   };
+
+  useEffect(() => {
+    setItems(data);
+  }, [data])
  
   // @see https://github.com/kutlugsahin/react-smooth-dnd
   return (
     <div>
     <div style={{ display: "flex", gap: "10px" }}>
       <Paper style={{ width: "50%", padding: "0 10px" }}>
-        <h1>下級生向けページ</h1>
-        <p>あなたの名前とメールアドレスを選択</p>
-        <select>
-          <option>aaa@st.kyoto-u.ac.jp</option>
-          <option>bbb@st.kyoto-u.ac.jp</option>
-          <option>ccc@st.kyoto-u.ac.jp</option>
-        </select>
         <h4>ドラッグ&ドロップで並び順操作</h4>
-
         <List>
           <Container onDrop={onDrop}>
             {items.map(({ id, text }) => (
@@ -61,7 +61,6 @@ const SortableList = () => {
         </List>
       </Paper>
     </div>
-      <form action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSegJchoGRpYPoMhOpc7WzOg1mLi_aq_KyGQMpo1u857ZTIwog/formResponse">
         <input name="entry.189157650" type="hidden" value={query.get('id')} required="required"></input>
         <textarea style={{display:'none'}} name="entry.398476216" required="required" value={
           JSON.stringify(
@@ -70,10 +69,55 @@ const SortableList = () => {
             2
           )
         }></textarea>
-        <Button type="submit" name="button" variant="contained">Submit</Button>
-      </form>
     </div>
   );
 };
- 
-ReactDOM.render(<Router><SortableList /></Router>, document.getElementById("root"));
+
+const VotingPage = ({ group }) => {
+  const userList = (group === "senior") ? senior_students : junior_students;
+  const candidateList = (group === "junior") ? senior_students : junior_students;
+
+  return (
+    <form action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSegJchoGRpYPoMhOpc7WzOg1mLi_aq_KyGQMpo1u857ZTIwog/formResponse">
+      <select>
+        {
+          userList.map(  user => <option>{user.mail}</option>)
+        }
+      </select>
+      <SortableList data={candidateList} />
+      <Button type="submit" name="button" variant="contained">Submit</Button>
+    </form>
+  )
+}
+
+const App = () => {
+  const [group, setGroup] = React.useState("junior");
+
+  return (
+    <div>
+      <h1>投票ページ</h1>
+      <p>あなたの属性を選択してください</p>
+      
+      <RadioGroup
+        aria-label="myGroup"
+        defaultValue="junior"
+        name="myGroup"
+        onChange={ (e) => { setGroup(e.target.value); }}
+      >
+        <FormControlLabel value="junior" control={<Radio />} label="私は下級生です" />
+        <FormControlLabel value="senior" control={<Radio />} label="私は上級生です" />
+      </RadioGroup>
+
+      <p>あなたの名前とメールアドレスを選択</p>
+
+      <VotingPage group={group}/>
+
+    </div>
+  );
+}
+
+ReactDOM.render(
+  <Router>
+    <App />
+  </Router>, 
+document.getElementById("root"));
